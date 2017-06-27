@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stock Details</title>
+</head>
+
+<body>
+
+	<p>
+		<button id="subscribe-button">Get Latest IBM Price</button>
+		<button id="list-stocks-button">List All Stocks</button>
+		<button id="ibm-stock-details-button">Show IBM Details</button>
+	<ul id="display"></ul>
+	</p>
+
+
+	<script type="application/javascript">
+		
+		addEvent("click", document.getElementById('subscribe-button'), function() {
+			registerEventSourceAndAddResponseTo("/stocks/price/IBM","display");		 
+		 });
+
+		addEvent("click", document.getElementById('list-stocks-button'), function() {
+			registerEventSourceAndAddResponseTo("/stocks","display");		 
+		 });
+
+		addEvent("click", document.getElementById('ibm-stock-details-button'), function() {
+			registerEventSourceAndAddResponseTo("/stocks/IBM","display");		 
+		 });
+
+		function registerEventSourceAndAddResponseTo(uri, elementId) {
+			var stringEvents = document.getElementById(elementId);
+
+		    while (stringEvents.hasChildNodes()) {
+		       stringEvents.removeChild(stringEvents.lastChild);
+		    }
+			
+		    var stringEventSource = new EventSource(uri);
+		    
+			stringEventSource.onmessage = function(e) {
+		    	var newElement = document.createElement("li");
+		    	newElement.innerHTML = e.data;
+		       stringEvents.appendChild(newElement);
+		    }
+		}
+
+		function addEvent(evnt, elem, func) {
+		    if (typeof(EventSource) !== "undefined") {
+		        elem.addEventListener(evnt,func,false);
+		    }
+		    else { // No much to do
+		        elem[evnt] = func;
+		    }
+		}
+	</script>
+</body>
+</html>

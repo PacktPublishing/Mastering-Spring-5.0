@@ -1,0 +1,9 @@
+app register --name significant-stock-change-source --type source --uri maven://com.mastering.spring.cloud.data.flow:significant-stock-change-source:jar:0.0.1-SNAPSHOT
+ 
+app register --name stock-intelligence-processor --type processor --uri maven://com.mastering.spring.cloud.data.flow:stock-intelligence-processor:jar:0.0.1-SNAPSHOT
+ 
+app register --name event-store-sink --type sink --uri maven://com.mastering.spring.cloud.data.flow:event-store-sink:jar:0.0.1-SNAPSHOT
+
+stream create --name process-stock-change-events --definition significant-stock-change-source|stock-intelligence-processor|event-store-sink
+
+stream deploy --name process-stock-change-events
